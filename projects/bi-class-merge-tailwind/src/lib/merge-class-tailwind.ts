@@ -1,4 +1,4 @@
-import { classesTailwind } from './data';
+import { classesTailwind } from './dataClasses/_data';
 import { ClassGroup, Group } from './types';
 
 export function initMerge(baseClass: string, classToMerge: string) {
