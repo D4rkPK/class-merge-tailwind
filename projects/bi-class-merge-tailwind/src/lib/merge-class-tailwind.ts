@@ -1,5 +1,5 @@
 import { classesTailwind } from './dataClasses/_data';
-import { ClassGroup, Group } from './types';
+import { ClassGroup, ClassProcess, Group } from './types';
 
 export function initMerge(baseClass: string, classToMerge: string) {
   const listToMerge = classToMerge.split(/\s+/);
@@ -26,23 +26,41 @@ export function initMerge(baseClass: string, classToMerge: string) {
     }
   }
 
-   categorizedBaseClasses.forEach((value) => resultClasses.add(value));
+  categorizedBaseClasses.forEach((value) => resultClasses.add(value));
 
   return Array.from(resultClasses).join(' ');
 }
 
 function categorizeClass(cls: string): string {
+  let groupName = '';
+  if (cls.includes(':')) {
+    const categoria = categorizePseudoClass(cls);
+    cls = categoria.class;
+    groupName += categoria.groupName;
+  }
+
   for (const classGroup of classesTailwind) {
     if (cls.startsWith(classGroup.prefix + classGroup.separator)) {
       for (const group of classGroup.groups) {
         if (cls.match(buildRegex(classGroup, group))) {
-          return `${classGroup.nameClassGroup}${classGroup.separator}${group.nameGroup}`;
+          groupName += `${classGroup.nameClassGroup}${classGroup.separator}${group.nameGroup}`;
+          return groupName;
         }
       }
     }
   }
 
-  return '';
+  return groupName;
+}
+
+function categorizePseudoClass(cls: string): ClassProcess {
+  const clases = cls.split(':');
+  const baseClass = clases.pop();
+  const clasesOrdenadas = clases.sort();
+  return {
+    class: baseClass ?? cls,
+    groupName: clasesOrdenadas.toString().toUpperCase(),
+  };
 }
 
 function buildRegex(classGroup: ClassGroup, group: Group): RegExp {

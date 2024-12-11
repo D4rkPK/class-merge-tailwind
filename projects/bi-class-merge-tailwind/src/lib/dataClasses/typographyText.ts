@@ -20,7 +20,7 @@ export const TypographyText: ClassGroup = {
         '6xl',
         '7xl',
         '8xl',
-        '9xl',
+        '9xl'
       ],
     },
     {

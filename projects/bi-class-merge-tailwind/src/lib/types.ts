@@ -9,3 +9,8 @@ export type Group = {
   nameGroup: string;
   classes: string[];
 };
+
+export type ClassProcess = {
+  class: string;
+  groupName: string;
+};
